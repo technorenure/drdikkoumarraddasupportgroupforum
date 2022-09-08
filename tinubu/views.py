@@ -25,11 +25,11 @@ def create_user(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
           user = form.save()
-
-        group = Group.objects.get(name='Members')
-        user.groups.add(group)
-
-        return redirect('login')
+          group = Group.objects.get(name='Members')
+          user.groups.add(group)
+          return redirect('login')
+        else:
+            return redirect('create_user')
 
     context = {
         "form":form,
@@ -141,7 +141,6 @@ def team(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Teams'])
 @admin_only_url
 def admin_dashboard(request):
     my_user = Profile.objects.get(user = request.user)
